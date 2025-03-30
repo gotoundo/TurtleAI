@@ -1,0 +1,346 @@
+[
+  {
+    "path": "event/alarm.md",
+    "title": "alarm"
+  },
+  {
+    "path": "event/char.md",
+    "title": "char"
+  },
+  {
+    "path": "event/computer_command.md",
+    "title": "computer\\_command"
+  },
+  {
+    "path": "event/disk.md",
+    "title": "disk"
+  },
+  {
+    "path": "event/disk_eject.md",
+    "title": "disk\\_eject"
+  },
+  {
+    "path": "event/file_transfer.md",
+    "title": "file\\_transfer"
+  },
+  {
+    "path": "event/http_check.md",
+    "title": "http\\_check"
+  },
+  {
+    "path": "event/http_failure.md",
+    "title": "http\\_failure"
+  },
+  {
+    "path": "event/http_success.md",
+    "title": "http\\_success"
+  },
+  {
+    "path": "event/key.md",
+    "title": "key"
+  },
+  {
+    "path": "event/key_up.md",
+    "title": "key\\_up"
+  },
+  {
+    "path": "event/modem_message.md",
+    "title": "modem\\_message"
+  },
+  {
+    "path": "event/monitor_resize.md",
+    "title": "monitor\\_resize"
+  },
+  {
+    "path": "event/monitor_touch.md",
+    "title": "monitor\\_touch"
+  },
+  {
+    "path": "event/mouse_click.md",
+    "title": "mouse\\_click"
+  },
+  {
+    "path": "event/mouse_drag.md",
+    "title": "mouse\\_drag"
+  },
+  {
+    "path": "event/mouse_scroll.md",
+    "title": "mouse\\_scroll"
+  },
+  {
+    "path": "event/mouse_up.md",
+    "title": "mouse\\_up"
+  },
+  {
+    "path": "event/paste.md",
+    "title": "paste"
+  },
+  {
+    "path": "event/peripheral.md",
+    "title": "peripheral"
+  },
+  {
+    "path": "event/peripheral_detach.md",
+    "title": "peripheral\\_detach"
+  },
+  {
+    "path": "event/rednet_message.md",
+    "title": "rednet\\_message"
+  },
+  {
+    "path": "event/redstone.md",
+    "title": "redstone"
+  },
+  {
+    "path": "event/speaker_audio_empty.md",
+    "title": "speaker\\_audio\\_empty"
+  },
+  {
+    "path": "event/task_complete.md",
+    "title": "task\\_complete"
+  },
+  {
+    "path": "event/term_resize.md",
+    "title": "term\\_resize"
+  },
+  {
+    "path": "event/terminate.md",
+    "title": "terminate"
+  },
+  {
+    "path": "event/timer.md",
+    "title": "timer"
+  },
+  {
+    "path": "event/turtle_inventory.md",
+    "title": "turtle\\_inventory"
+  },
+  {
+    "path": "event/websocket_closed.md",
+    "title": "websocket\\_closed"
+  },
+  {
+    "path": "event/websocket_failure.md",
+    "title": "websocket\\_failure"
+  },
+  {
+    "path": "event/websocket_message.md",
+    "title": "websocket\\_message"
+  },
+  {
+    "path": "event/websocket_success.md",
+    "title": "websocket\\_success"
+  },
+  {
+    "path": "generic_peripheral/energy_storage.md",
+    "title": "energy\\_storage"
+  },
+  {
+    "path": "generic_peripheral/fluid_storage.md",
+    "title": "fluid\\_storage"
+  },
+  {
+    "path": "generic_peripheral/inventory.md",
+    "title": "inventory"
+  },
+  {
+    "path": "guide/gps_setup.md",
+    "title": "Setting up GPS"
+  },
+  {
+    "path": "guide/local_ips.md",
+    "title": "Allowing access to local IPs"
+  },
+  {
+    "path": "guide/speaker_audio.md",
+    "title": "Playing audio with speakers"
+  },
+  {
+    "path": "guide/using_require.md",
+    "title": "Reusing code with require"
+  },
+  {
+    "path": "index.md",
+    "title": "CC: Tweaked"
+  },
+  {
+    "path": "library/cc.audio.dfpwm.md",
+    "title": "cc.audio.dfpwm"
+  },
+  {
+    "path": "library/cc.completion.md",
+    "title": "cc.completion"
+  },
+  {
+    "path": "library/cc.expect.md",
+    "title": "cc.expect"
+  },
+  {
+    "path": "library/cc.image.nft.md",
+    "title": "cc.image.nft"
+  },
+  {
+    "path": "library/cc.pretty.md",
+    "title": "cc.pretty"
+  },
+  {
+    "path": "library/cc.require.md",
+    "title": "cc.require"
+  },
+  {
+    "path": "library/cc.shell.completion.md",
+    "title": "cc.shell.completion"
+  },
+  {
+    "path": "library/cc.strings.md",
+    "title": "cc.strings"
+  },
+  {
+    "path": "module/_G.md",
+    "title": "\\_G"
+  },
+  {
+    "path": "module/colors.md",
+    "title": "colors"
+  },
+  {
+    "path": "module/colours.md",
+    "title": "colours"
+  },
+  {
+    "path": "module/commands.md",
+    "title": "commands"
+  },
+  {
+    "path": "module/disk.md",
+    "title": "disk"
+  },
+  {
+    "path": "module/fs.md",
+    "title": "fs"
+  },
+  {
+    "path": "module/gps.md",
+    "title": "gps"
+  },
+  {
+    "path": "module/help.md",
+    "title": "help"
+  },
+  {
+    "path": "module/http.md",
+    "title": "http"
+  },
+  {
+    "path": "module/io.md",
+    "title": "io"
+  },
+  {
+    "path": "module/keys.md",
+    "title": "keys"
+  },
+  {
+    "path": "module/multishell.md",
+    "title": "multishell"
+  },
+  {
+    "path": "module/os.md",
+    "title": "os"
+  },
+  {
+    "path": "module/paintutils.md",
+    "title": "paintutils"
+  },
+  {
+    "path": "module/parallel.md",
+    "title": "parallel"
+  },
+  {
+    "path": "module/peripheral.md",
+    "title": "peripheral"
+  },
+  {
+    "path": "module/pocket.md",
+    "title": "pocket"
+  },
+  {
+    "path": "module/rednet.md",
+    "title": "rednet"
+  },
+  {
+    "path": "module/redstone.md",
+    "title": "redstone"
+  },
+  {
+    "path": "module/settings.md",
+    "title": "settings"
+  },
+  {
+    "path": "module/shell.md",
+    "title": "shell"
+  },
+  {
+    "path": "module/term.md",
+    "title": "term"
+  },
+  {
+    "path": "module/textutils.md",
+    "title": "textutils"
+  },
+  {
+    "path": "module/turtle.md",
+    "title": "turtle"
+  },
+  {
+    "path": "module/vector.md",
+    "title": "vector"
+  },
+  {
+    "path": "module/window.md",
+    "title": "window"
+  },
+  {
+    "path": "peripheral/command.md",
+    "title": "command"
+  },
+  {
+    "path": "peripheral/computer.md",
+    "title": "computer"
+  },
+  {
+    "path": "peripheral/drive.md",
+    "title": "drive"
+  },
+  {
+    "path": "peripheral/modem.md",
+    "title": "modem"
+  },
+  {
+    "path": "peripheral/monitor.md",
+    "title": "monitor"
+  },
+  {
+    "path": "peripheral/printer.md",
+    "title": "printer"
+  },
+  {
+    "path": "peripheral/redstone_relay.md",
+    "title": "redstone\\_relay"
+  },
+  {
+    "path": "peripheral/speaker.md",
+    "title": "speaker"
+  },
+  {
+    "path": "reference/breaking_changes.md",
+    "title": "Incompatibilities between versions"
+  },
+  {
+    "path": "reference/computercraft_command.md",
+    "title": "The /computercraft command"
+  },
+  {
+    "path": "reference/feature_compat.md",
+    "title": "Lua 5.2/5.3 features in CC: Tweaked"
+  }
+]
