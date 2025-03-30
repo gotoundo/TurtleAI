@@ -3,6 +3,8 @@ Welcome to my AI integration project for Minecraft!
 
 I only started playing the [Computer Craft: Tweaked](https://tweaked.cc/) mod a couple weeks ago -- it lets you run Lua code in Minecraft on little computers and entities called Turtles -- I've definitely been hyperfocusing on it a little bit. I'm actually playing in survival mode so I haven't even unlocked most of the mod yet, including GPS lmao. Our server is using [AllTheMods9](https://www.curseforge.com/minecraft/modpacks/all-the-mods-9).
 
+![screenshot](readme-screenshot.webp)
+
 Anyway, this project is all about piping LLM APIs into Minecraft so you can use AI to answer questions about documentation, translate natural language into turtle mining code, power fully independent NPCs and computer systems... Right now I've got working integrations for Gemini and Ollama chatbots. I'm just gonna poop this code into the public sphere before I get distracted. Having other people complain about my code will motivate me to make it better. Sorry in advance.
 
 To get this running, drag the lua scripts into the computer or turtle you want to run them on. I don't have a great solution for moving the documentation files onto computers yet (maybe a setup script with a bunch of wget/pastebin calls?), so you'll have to make the cc_docs folder manually and drag all the documentation files inside over one by one. The ollama chatbot defaults to [qwen](https://ollama.com/library/qwen2.5) but you can edit the script try whatever local model you'd like to use. You'll want to get a free Gemini key from [Google AI Studio](https://ai.google.dev/gemini-api/docs/api-key). Currently only the Gemini chatbot has access the computercraft documentation, and is faster and is easier to use on multiplayer servers.
