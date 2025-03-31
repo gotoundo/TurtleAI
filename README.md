@@ -22,7 +22,7 @@ I've also included an [Ollama chatbot script](https://github.com/gotoundo/Turtle
 
 I think the [gemini_turtle.lua](https://github.com/gotoundo/TurtleAI/blob/main/gemini_turtle.lua) script is the most interesting right now as it lets you talk to the turtle in natural language and it will execute custom Lua code to drive itself around and do stuff. My main focus now is cleaning up the prompt engineering so it can understand ComputerCraft code better. I've included a [simple_mining.lua](https://github.com/gotoundo/TurtleAI/blob/main/simple_mining.lua) script that the turtle can call with different dimensions - a demonstration of agentic tool calling. It would be great to get some help from some more experienced computercrafters to make that mining script more efficient.
 
-I strongly recommend you use a secure pocket computer for this as the API key(s) are saved in plaintext in the computer/turtle's settings. Don't use this code on a public server or someone can probably steal your API key (this is bad).
+I strongly recommend you use a secure pocket computer for this as the API key(s) are saved in plaintext in the computer's settings. Don't use this code on a public server or someone can probably steal your API key (this is bad).
 
 ## Let's make Skynet in Minecraft lmao
 Anyways, I'd love to collaborate with you on this project. Please use the [discussion tab](https://github.com/gotoundo/TurtleAI/discussions), make pull requests, etc. Even if you don't know how to code I'd love to know what types of scripts you're using so I can check them out as a reference. Again, I only started in ComputerCraft a couple weeks ago and this mod apparently has like a decade of history. If you're a more advanced coder and down to clown, let's start dividing up work ;)
