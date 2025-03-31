@@ -164,3 +164,6 @@ print("Files from folders: " .. successfulFolderFiles .. "/" .. totalFolderFiles
 print("Total files: " .. (successfulIndividualFiles + successfulFolderFiles) .. 
       "/" .. (totalIndividualFiles + totalFolderFiles))
 print("Download complete!")
+
+-- Find this line at the end of the main function
+print("Exiting TurtleAI Downloader...")

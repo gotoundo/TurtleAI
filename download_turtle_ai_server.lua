@@ -149,6 +149,16 @@ end
 local totalFolderFiles = 0
 local successfulFolderFiles = 0
 
+
+local function runServerAndCleanup()
+  if fs.exists("download_turtle_ai_server.lua") then
+    print("Removing downloader script...")
+    fs.delete("download_turtle_ai_server.lua")
+  end  
+  print("Starting TurtleAI Server...")
+  shell.run("turtle_ai_server.lua")
+end
+
 print("\n=== Downloading folders ===")
 for _, folderPath in ipairs(foldersToDownload) do
   print("Processing folder: " .. folderPath)
@@ -164,3 +174,4 @@ print("Files from folders: " .. successfulFolderFiles .. "/" .. totalFolderFiles
 print("Total files: " .. (successfulIndividualFiles + successfulFolderFiles) .. 
       "/" .. (totalIndividualFiles + totalFolderFiles))
 print("Download complete!")
+runServerAndCleanup()
