@@ -1,5 +1,5 @@
 ## Updates
-Download and run [this script](https://github.com/gotoundo/TurtleAI/blob/main/download_turtle_ai_client.lua) on your Computer to download 1) Gemini chatbot with documentation, and 2) the client for controlling turtles.
+Download and run [this script](https://github.com/gotoundo/TurtleAI/blob/main/download_turtle_ai_client.lua) on your in-game Computer to download 1) Gemini chatbot with documentation, and 2) the client for controlling turtles.
 
 # TurtleAI
 Welcome to my AI integration project for Minecraft! 
