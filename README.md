@@ -1,4 +1,4 @@
-## Update:
+## Updates
 Download and run [this script] on your Computer to download 1) Gemini chatbot with documentation, and 2) the client for controlling turtles.
 
 # TurtleAI
