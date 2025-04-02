@@ -1,5 +1,5 @@
-local tunnelDepth = 16*0.25 --chunk is 16 deep
-local tunnelLoops = 4*0.5 --chunk is 4 loops wide
+local tunnelDepth = 16 * 6 --chunk is 16 deep
+local tunnelLoops = 4 --chunk is 4 loops wide
 
 turtle.dig()
 turtle.forward()
@@ -82,9 +82,9 @@ end
 --return home
 print("Returning home...")
 turtle.turnRight()
+--digTunnel(2)
+turtle.turnRight()
+digTunnel(3)
 turtle.turnRight()
 storeItemsBehind()
-digTunnel(2)
-turtle.turnRight()
-digTunnel(tunnelLoops * 4)
-carveRightTurn()
+digTunnel((tunnelLoops * 4)-2)
