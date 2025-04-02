@@ -1,11 +1,11 @@
-local tunnelDepth = 16*1 --chunk is 16 deep
-local tunnelLoops = 4*1 --chunk is 4 loops wide
+local tunnelDepth = 16*0.25 --chunk is 16 deep
+local tunnelLoops = 4*0.5 --chunk is 4 loops wide
 
 turtle.dig()
 turtle.forward()
 
 local function digForward()
-    while turtle.dig() do print("Dig!") end --continuously dig through falling sand/gravel
+    while turtle.dig() do write("Dig! ") end --continuously dig through falling sand/gravel
 end
 
 local function digLeft()
@@ -71,6 +71,7 @@ local function storeItemsBehind()
 end
 
 for i=1,tunnelLoops do
+    print("Starting tunnel loop ",i," of ",tunnelLoops)
     storeItemsBehind()
     digTunnel(tunnelDepth)
     carveRightTurn()
@@ -79,9 +80,11 @@ for i=1,tunnelLoops do
 end
 
 --return home
+print("Returning home...")
+turtle.turnRight()
+turtle.turnRight()
 storeItemsBehind()
-carveRightTurn()
-digTunnel(1)
-carveRightTurn()
+digTunnel(2)
+turtle.turnRight()
 digTunnel(tunnelLoops * 4)
 carveRightTurn()
