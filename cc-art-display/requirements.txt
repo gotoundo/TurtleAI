@@ -1,0 +1,10 @@
+# CC Art Display Bridge Server Requirements
+
+# Web server
+Flask>=3.0.0
+
+# Image processing (from parent ai-console-art project)
+Pillow>=10.0.0
+
+# HTTP client
+requests>=2.31.0
