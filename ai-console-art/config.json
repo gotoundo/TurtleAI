@@ -1,0 +1,18 @@
+{
+  "comfy_path": "C:/Users/trogd/Documents/GitHub/ComfyUI",
+  "server_port": 8188,
+  "default_settings": {
+    "image_width": 512,
+    "image_height": 512,
+    "steps": 20,
+    "cfg": 7.0,
+    "ascii_width": 100,
+    "ascii_style": "detailed",
+    "contrast": 1.0
+  },
+  "model_preferences": {
+    "checkpoint": "sd_xl_base_1.0.safetensors",
+    "sampler": "euler",
+    "scheduler": "normal"
+  }
+}

@@ -1,0 +1,16 @@
+# AI Console Art Generator Requirements
+
+# Image processing
+Pillow>=10.0.0
+numpy>=1.24.0
+
+# HTTP client for ComfyUI API
+requests>=2.31.0
+websocket-client>=1.6.0
+
+# Console/Terminal utilities
+colorama>=0.4.6  # Cross-platform color support
+rich>=13.0.0     # Beautiful terminal formatting
+
+# Async support
+aiohttp>=3.9.0
