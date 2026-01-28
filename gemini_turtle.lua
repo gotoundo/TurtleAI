@@ -2,7 +2,7 @@
 -- A program that uses Gemini AI to interpret natural language commands into turtle actions
 -- Based on the original gemini_chat.lua implementation
 
-local MODEL = "models/gemini-3.0-flash-preview"
+local MODEL = "models/gemini-3-flash-preview"
 local VERSION = "1.0.4"
 
 -- Debug mode (set to true for more logging)

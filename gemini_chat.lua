@@ -1,6 +1,6 @@
 -- Gemini Chat for ComputerCraft with Local Documentation
 -- Refactored to be smaller while maintaining full RAG functionality
-local MODEL, VERSION = "models/gemini-3.0-flash-preview", "1.4.0"
+local MODEL, VERSION = "models/gemini-3-flash-preview", "1.4.1"
 local DEBUG, DOCS_LOADED = false, false
 
 -- Simplified JSON helpers
