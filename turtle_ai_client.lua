@@ -1,7 +1,7 @@
 -- TurtleAI Client
 -- Control turtles with natural language through Gemini AI
 
-local MODEL = "models/gemini-2.0-flash"
+local MODEL = "models/gemini-3.0-flash-preview"
 local VERSION = "1.0.0"
 
 -- Configuration
