@@ -1,6 +1,6 @@
 -- Gemini Chat for ComputerCraft with Local Documentation
 -- Refactored to be smaller while maintaining full RAG functionality
-local MODEL, VERSION = "models/gemini-3-flash-preview", "1.5.1"
+local MODEL, VERSION = "models/gemini-3-flash-preview", "1.6.0"
 local DEBUG, DOCS_LOADED = false, false
 
 -- Simplified JSON helpers
@@ -432,22 +432,12 @@ local function main()
   term.clear()
   term.setCursorPos(1, 1)
 
-  print("=== Gemini Chat v" .. VERSION .. " with Documentation ===")
-  print("Model: " .. MODEL)
-  print("Commands: exit, setkey, clear, save, listdocs, debug, reload, update")
+  print("=== CC Chat v" .. VERSION .. " ===")
+  print("Type 'help' for commands")
   print("-------------------------------------------------")
 
-  if not settings.get("gemini.api_key") or settings.get("gemini.api_key") == "" then
-    print("API key not set! Type 'setkey' to set it.")
-  else
-    local key = settings.get("gemini.api_key")
-    print("API key: " .. key:sub(1, 8) .. "..." .. key:sub(-4))
-  end
-
-  -- Load docs on startup
-  local success, message = loadDocs()
-  if success then print("Documentation loaded: " .. #docIndex .. " sections.")
-  else print("Documentation failed to load: " .. message) end
+  -- Load docs silently on startup
+  loadDocs()
   
   while true do
     term.setTextColor(colors.yellow)
@@ -461,6 +451,37 @@ local function main()
     -- Handle commands
     if command == "exit" then
       break
+    elseif command == "help" then
+      print("\nAvailable Commands:")
+      print("  help     - Show this help message")
+      print("  info     - Show system information")
+      print("  setkey   - Set your Gemini API key")
+      print("  clear    - Clear conversation history")
+      print("  save     - Save conversation to file")
+      print("  listdocs - List loaded documentation")
+      print("  reload   - Reload documentation")
+      print("  update   - Update to latest version")
+      print("  debug    - Toggle debug mode")
+      print("  exit     - Exit the program")
+    elseif command == "info" then
+      print("\nSystem Information:")
+      print("Version: " .. VERSION)
+      print("Model: " .. MODEL)
+
+      if not settings.get("gemini.api_key") or settings.get("gemini.api_key") == "" then
+        print("API Key: Not set")
+      else
+        local key = settings.get("gemini.api_key")
+        print("API Key: " .. key:sub(1, 8) .. "..." .. key:sub(-4))
+      end
+
+      if #docIndex > 0 then
+        print("Documentation: " .. #docIndex .. " sections loaded")
+      else
+        print("Documentation: Not loaded")
+      end
+
+      print("Debug Mode: " .. (DEBUG and "Enabled" or "Disabled"))
     elseif command == "setkey" then
       term.setTextColor(colors.cyan)
       write("Enter your Gemini API key: ")
