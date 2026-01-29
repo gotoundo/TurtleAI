@@ -147,8 +147,8 @@ local function generateImage(prompt, aspectRatio)
   aspectRatio = aspectRatio or "1:1"
   print("Generating image (this may take a moment)...")
 
-  -- Gemini 2.5 Flash Image endpoint
-  local url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent"
+  -- Gemini 2.5 Flash Image endpoint (API key in URL like gemini_chat.lua)
+  local url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=" .. apiKey
 
   -- Build request
   local requestBody = textutils.serializeJSON({
@@ -163,10 +163,9 @@ local function generateImage(prompt, aspectRatio)
     }
   })
 
-  -- Send request with API key in header
+  -- Send request (API key is in URL, not header)
   local headers = {
-    ["Content-Type"] = "application/json",
-    ["x-goog-api-key"] = apiKey
+    ["Content-Type"] = "application/json"
   }
 
   local response = http.post(url, requestBody, headers)
