@@ -1,6 +1,6 @@
 -- Gemini Chat for ComputerCraft with Local Documentation
 -- Refactored to be smaller while maintaining full RAG functionality
-local MODEL, VERSION = "models/gemini-3-flash-preview", "1.5.0"
+local MODEL, VERSION = "models/gemini-3-flash-preview", "1.5.1"
 local DEBUG, DOCS_LOADED = false, false
 
 -- Simplified JSON helpers
@@ -537,14 +537,8 @@ local function main()
         if #docIndex > 10 then print("...and " .. (#docIndex - 10) .. " more") end
       end
     elseif input ~= "" then -- Ignore empty input
-      term.setTextColor(colors.cyan)
-      print("Thinking with documentation...")
-      term.setTextColor(colors.white)
-      
       local response, message = answerWithRAG(input)
-      
-      term.setTextColor(colors.lightGray)
-      print("(" .. message .. ")")
+
       term.setTextColor(colors.cyan)
       print("Gemini:")
       term.setTextColor(colors.white)
