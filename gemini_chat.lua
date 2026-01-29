@@ -8,7 +8,7 @@ local DEBUG, DOCS_LOADED = false, false
 local MODELS = {
   ["2.5"] = "models/gemini-2.5-flash",
   ["3"] = "models/gemini-3-flash-preview",
-  ["gemma"] = "gemma-3-27b-it"
+  ["gemma"] = "gemma-3-27b"
 }
 
 -- Simplified JSON helpers
