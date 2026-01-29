@@ -1,6 +1,6 @@
 -- Gemini Chat for ComputerCraft with Local Documentation
 -- Refactored to be smaller while maintaining full RAG functionality
-local MODEL, VERSION = "models/gemini-3-flash-preview", "1.4.1"
+local MODEL, VERSION = "models/gemini-3-flash-preview", "1.4.2"
 local DEBUG, DOCS_LOADED = false, false
 
 -- Simplified JSON helpers
@@ -16,6 +16,14 @@ end
 
 -- Parse JSON response
 local function parseJSON(json)
+  local success, decoded = pcall(textutils.unserialiseJSON, json)
+  if success and decoded and decoded.candidates and decoded.candidates[1] then
+    local parts = decoded.candidates[1].content and decoded.candidates[1].content.parts
+    if parts and parts[1] and parts[1].text then
+      return {text = parts[1].text}
+    end
+  end
+  -- Fallback to regex if proper parsing fails
   local content = json:match('"text"%s*:%s*"(.-[^\\])"') or json:match('"text"%s*:%s*"(.-)"')
   return content and {text = jsonUnescape(content)} or {}
 end
