@@ -168,18 +168,28 @@ local function generateImage(prompt, aspectRatio)
     ["Content-Type"] = "application/json"
   }
 
+  -- Debug output
+  print("[DEBUG] URL: " .. url:sub(1, 80) .. "...")
+  print("[DEBUG] Request body length: " .. #requestBody)
+
   local response = http.post(url, requestBody, headers)
 
   if not response then
+    print("[DEBUG] http.post returned nil - connection failed")
     return nil, "Could not connect to Gemini API. Check network and API key."
   end
 
+  print("[DEBUG] Got response, reading...")
   local responseText = response.readAll()
   response.close()
+
+  print("[DEBUG] Response length: " .. #responseText)
+  print("[DEBUG] First 200 chars: " .. responseText:sub(1, 200))
 
   -- Parse JSON response
   local result = textutils.unserialiseJSON(responseText)
   if not result then
+    print("[DEBUG] Failed to parse JSON")
     return nil, "Failed to parse API response"
   end
 
@@ -188,6 +198,7 @@ local function generateImage(prompt, aspectRatio)
   if not (result.candidates and result.candidates[1]) then
     -- Try to extract error message
     local errorMsg = result.error and result.error.message or "Unknown error"
+    print("[DEBUG] API Error: " .. errorMsg)
     return nil, "API Error: " .. errorMsg
   end
 
