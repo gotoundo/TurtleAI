@@ -1,6 +1,6 @@
 -- Gemini Chat for ComputerCraft with Local Documentation
 -- Refactored to be smaller while maintaining full RAG functionality
-local MODEL, VERSION = "models/gemini-3-flash-preview", "1.6.0"
+local MODEL, VERSION = "models/gemini-3-flash-preview", "1.6.1"
 local DEBUG, DOCS_LOADED = false, false
 
 -- Simplified JSON helpers
@@ -37,7 +37,6 @@ settings.load()
 local conversationHistory = {}
 local function addToHistory(role, message)
   table.insert(conversationHistory, {role = role, text = message})
-  if DEBUG then print("Added to history: " .. role .. " - " .. message:sub(1, 30) .. "...") end
 end
 
 -- Documentation storage
@@ -48,18 +47,11 @@ local function trim(s) return s:match("^%s*(.-)%s*$") end
 local function callGemini(prompt, withHistory, docContext, maxTokens)
   local apiKey = settings.get("gemini.api_key")
   if not apiKey or apiKey == "" then
-    if DEBUG then print("[DEBUG] API key not set") end
     return nil, "API key not set. Use 'setkey' to set it."
   end
 
   local url = "https://generativelanguage.googleapis.com/v1beta/" .. MODEL .. ":generateContent?key=" .. apiKey
   local requestBody
-
-  if DEBUG then
-    local maskedKey = apiKey:sub(1, 8) .. "..." .. apiKey:sub(-4)
-    print("[DEBUG] Using model: " .. MODEL)
-    print("[DEBUG] URL: https://...?key=" .. maskedKey)
-  end
 
   if withHistory then
     addToHistory("user", prompt)
@@ -78,76 +70,54 @@ local function callGemini(prompt, withHistory, docContext, maxTokens)
       end
     end
     requestBody = '{"contents":[' .. table.concat(messages, ",") .. ']'
-    if DEBUG then print("[DEBUG] Request with history, " .. #conversationHistory .. " messages") end
+    if DEBUG then print("[DEBUG] Sending request with " .. #conversationHistory .. " messages in history") end
   else
     requestBody = '{"contents":[{"role":"user","parts":[{"text":"' .. jsonEscape(prompt) .. '"}]}]'
-    if DEBUG then print("[DEBUG] Single request without history") end
+    if DEBUG then print("[DEBUG] Sending single request") end
   end
 
   if maxTokens then
     requestBody = requestBody .. ',"generationConfig":{"maxOutputTokens":' .. maxTokens .. '}'
-    if DEBUG then print("[DEBUG] Max tokens: " .. maxTokens) end
   end
   requestBody = requestBody .. '}'
 
-  if DEBUG then
-    print("[DEBUG] Request body length: " .. #requestBody .. " chars")
-    print("[DEBUG] Request preview: " .. requestBody:sub(1, 150) .. "...")
-  end
-
-  if DEBUG then print("[DEBUG] Sending HTTP POST request...") end
   local response = http.post(url, requestBody, {["Content-Type"] = "application/json"})
 
   if not response then
     if withHistory then table.remove(conversationHistory) end
     if DEBUG then
-      print("[DEBUG] HTTP POST failed - no response object")
-      print("[DEBUG] Possible causes:")
-      print("[DEBUG]   - Network connection issue")
-      print("[DEBUG]   - Invalid API key")
-      print("[DEBUG]   - Model name incorrect: " .. MODEL)
-      print("[DEBUG]   - API endpoint changed")
+      print("[DEBUG] Connection failed - check network, API key, or model name")
     end
     return nil, "Could not connect to Gemini API - check network and API key"
   end
 
-  if DEBUG then print("[DEBUG] HTTP response received, reading...") end
   local responseText = response.readAll()
   response.close()
 
   if DEBUG then
-    print("[DEBUG] Response length: " .. #responseText .. " chars")
-    print("[DEBUG] Response preview: " .. responseText:sub(1, 300))
-    if #responseText > 300 then
-      print("[DEBUG] Response end: ..." .. responseText:sub(-100))
-    end
+    print("[DEBUG] Received response (" .. #responseText .. " chars)")
   end
 
   local result = parseJSON(responseText)
   if not result.text then
     if withHistory then table.remove(conversationHistory) end
-    if DEBUG then
-      print("[DEBUG] Failed to parse 'text' field from response")
-      print("[DEBUG] Full response: " .. responseText)
-
-      -- Check for common error patterns
-      if responseText:match('"error"') then
-        print("[DEBUG] ERROR detected in response!")
-        local errorMsg = responseText:match('"message"%s*:%s*"([^"]+)"')
-        if errorMsg then print("[DEBUG] Error message: " .. errorMsg) end
-      end
-    end
 
     -- Try to extract error message from response
     local errorMsg = responseText:match('"message"%s*:%s*"([^"]+)"')
     if errorMsg then
+      if DEBUG then print("[DEBUG] Server error: " .. errorMsg) end
       return nil, "API Error: " .. errorMsg
+    end
+
+    if DEBUG then
+      print("[DEBUG] Failed to parse response:")
+      print(responseText:sub(1, 500))
     end
 
     return nil, "Failed to parse response - enable debug mode for details"
   end
 
-  if DEBUG then print("[DEBUG] Successfully parsed response text") end
+  if DEBUG then print("[DEBUG] Response parsed successfully") end
   if withHistory then addToHistory("model", result.text) end
   return result.text
 end
@@ -155,15 +125,11 @@ end
 -- Load documentation
 local function loadDocs()
   if DOCS_LOADED and #docIndex > 0 then
-    if DEBUG then print("[DEBUG] Documentation already loaded") end
     return true, "Documentation already loaded (" .. #docIndex .. " sections)"
   end
 
   local docsPath = settings.get("docs.path")
-  if DEBUG then print("[DEBUG] Loading docs from: " .. docsPath) end
-
   local indexPath = fs.combine(docsPath, "category_index.json")
-  if DEBUG then print("[DEBUG] Index path: " .. indexPath) end
 
   if not fs.exists(indexPath) then
     if DEBUG then print("[DEBUG] Category index not found at: " .. indexPath) end
@@ -173,33 +139,27 @@ local function loadDocs()
   local file = fs.open(indexPath, "r")
   local indexContent = file.readAll()
   file.close()
-  if DEBUG then print("[DEBUG] Index content length: " .. #indexContent .. " chars") end
 
   -- Parse categories
   local categories = {}
   for category, combined_file, file_count in indexContent:gmatch('"([^"]+)"%s*:%s*{%s*"combined_file"%s*:%s*"([^"]+)"%s*,%s*"file_count"%s*:%s*(%d+)') do
     categories[category] = {combined_file = combined_file, file_count = tonumber(file_count)}
-    if DEBUG then print("[DEBUG] Found category: " .. category .. " with file: " .. combined_file) end
   end
 
   if not next(categories) then
-    if DEBUG then print("[DEBUG] Failed to parse any categories from index") end
+    if DEBUG then print("[DEBUG] Failed to parse categories from index") end
     return false, "Failed to parse categories from index"
   end
-
-  if DEBUG then print("[DEBUG] Parsed " .. #categories .. " categories, loading files...") end
 
   local count, docId = 0, 0
 
   for category, data in pairs(categories) do
     local filePath = fs.combine(docsPath, data.combined_file)
-    if DEBUG then print("[DEBUG] Loading: " .. filePath) end
 
     if fs.exists(filePath) then
       local docFile = fs.open(filePath, "r")
       local content = docFile.readAll()
       docFile.close()
-      if DEBUG then print("[DEBUG] Read " .. #content .. " chars from " .. data.combined_file) end
 
       docs[category] = {}
 
@@ -255,14 +215,11 @@ local function loadDocs()
 
         count = count + 1
       end
-      if DEBUG then print("[DEBUG] Loaded " .. count .. " sections from " .. category) end
-    else
-      if DEBUG then print("[DEBUG] WARNING: File not found: " .. filePath) end
     end
   end
 
   DOCS_LOADED = (count > 0)
-  if DEBUG then print("[DEBUG] Total docs loaded: " .. count .. " sections") end
+  if DEBUG then print("[DEBUG] Loaded " .. count .. " documentation sections") end
   return true, count .. " documentation sections loaded"
 end
 
@@ -289,11 +246,8 @@ end
 -- Stage 1: Select relevant documents
 local function selectDocs(query)
   if #docIndex == 0 then
-    if DEBUG then print("[DEBUG] No documentation loaded") end
     return {}, "No documentation loaded. Use 'reload' to reload."
   end
-
-  if DEBUG then print("[DEBUG] Selecting docs from " .. #docIndex .. " available") end
 
   local selectionPrompt = [[
 You are a documentation retrieval system for ComputerCraft (CC: Tweaked).
@@ -309,14 +263,10 @@ Return ONLY a JSON array of document IDs, like:
 Do not include explanations - ONLY a JSON array of numbers.
 ]]
 
-  if DEBUG then print("[DEBUG] Calling Gemini for doc selection...") end
   local response, error = callGemini(selectionPrompt, false)
   if not response then
-    if DEBUG then print("[DEBUG] Doc selection failed: " .. (error or "unknown")) end
     return {}, error or "Document selection failed"
   end
-
-  if DEBUG then print("[DEBUG] Doc selection response: " .. response) end
 
   -- Extract and process document IDs
   local selectedDocs = {}
@@ -325,25 +275,21 @@ Do not include explanations - ONLY a JSON array of numbers.
   -- Extract IDs either from JSON array or as individual numbers
   local selectedIds = {}
   if idsArray then
-    if DEBUG then print("[DEBUG] Found ID array: " .. idsArray) end
     for id in idsArray:gmatch("%d+") do
       table.insert(selectedIds, tonumber(id))
     end
   else
-    if DEBUG then print("[DEBUG] Failed to parse doc IDs from: " .. response) end
     for id in response:gmatch("%d+") do
       table.insert(selectedIds, tonumber(id))
       if #selectedIds >= 3 then break end
     end
   end
 
-  if DEBUG then print("[DEBUG] Selected " .. #selectedIds .. " doc IDs") end
-
   -- Map IDs to documents
   for _, id in ipairs(selectedIds) do
     for _, doc in ipairs(docIndex) do
       if doc.id == id then
-        if DEBUG then print("[DEBUG] Matched doc ID " .. id .. ": " .. doc.name) end
+        if DEBUG then print("[DEBUG] Selected: " .. doc.name) end
         table.insert(selectedDocs, doc)
         break
       end
@@ -384,46 +330,32 @@ end
 
 -- Full RAG pipeline
 local function answerWithRAG(query)
-  if DEBUG then print("[DEBUG] ===== Starting RAG pipeline =====") end
-  if DEBUG then print("[DEBUG] Query: " .. query) end
-
   -- Stage 1: Select docs
-  if DEBUG then print("[DEBUG] Stage 1: Document selection") end
   local selectedDocs, message = selectDocs(query)
-  if DEBUG then print("[DEBUG] " .. message) end
 
   -- Build context from selected docs
   local docContext = ""
   local docNames = {}
 
   if #selectedDocs > 0 then
-    if DEBUG then print("[DEBUG] Stage 2: Building context from " .. #selectedDocs .. " docs") end
     docContext = "Relevant ComputerCraft Documentation:\n\n"
     for _, doc in ipairs(selectedDocs) do
       local content = getDocContent(doc.path)
       if content then
-        if DEBUG then print("[DEBUG] Adding doc: " .. doc.name .. " (" .. #content .. " chars)") end
         docContext = docContext .. "--- " .. doc.name .. " (" .. doc.category .. ") ---\n"
         docContext = docContext .. content .. "\n\n"
         table.insert(docNames, doc.name)
-      else
-        if DEBUG then print("[DEBUG] WARNING: Could not get content for " .. doc.path) end
       end
     end
-    if DEBUG then print("[DEBUG] Total context length: " .. #docContext .. " chars") end
-  else
-    if DEBUG then print("[DEBUG] No documents selected, proceeding without context") end
+    if DEBUG then print("[DEBUG] Using " .. #selectedDocs .. " docs (" .. #docContext .. " chars context)") end
   end
 
   -- Call Gemini with conversation history and document context
-  if DEBUG then print("[DEBUG] Stage 3: Calling Gemini with context") end
   local answer, error = callGemini(query, true, docContext, 1000)
   if not answer then
-    if DEBUG then print("[DEBUG] Final answer failed: " .. (error or "unknown")) end
     return "Error: " .. (error or "Failed to get response"), "Error occurred"
   end
 
-  if DEBUG then print("[DEBUG] ===== RAG pipeline complete =====") end
   return answer, (#docNames > 0) and "Using: " .. table.concat(docNames, ", ") or "No documentation used"
 end
 
