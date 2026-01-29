@@ -1,7 +1,15 @@
 -- Gemini Chat for ComputerCraft with Local Documentation
 -- Refactored to be smaller while maintaining full RAG functionality
-local MODEL, VERSION = "models/gemini-3-flash-preview", "1.6.1"
+local VERSION = "1.7.0"
+local MODEL = "models/gemini-2.5-flash"  -- Default model
 local DEBUG, DOCS_LOADED = false, false
+
+-- Available models
+local MODELS = {
+  ["2.5"] = "models/gemini-2.5-flash",
+  ["3"] = "models/gemini-3-flash-preview",
+  ["flash"] = "models/gemini-2.5-flash"
+}
 
 -- Simplified JSON helpers
 local function jsonEscape(str)
@@ -387,6 +395,7 @@ local function main()
       print("\nAvailable Commands:")
       print("  help     - Show this help message")
       print("  info     - Show system information")
+      print("  model    - Switch model (2.5 or 3)")
       print("  setkey   - Set your Gemini API key")
       print("  clear    - Clear conversation history")
       print("  save     - Save conversation to file")
@@ -414,6 +423,24 @@ local function main()
       end
 
       print("Debug Mode: " .. (DEBUG and "Enabled" or "Disabled"))
+    elseif command == "model" then
+      local arg = input:match("^model%s+(.+)$")
+      if arg then
+        local newModel = MODELS[arg]
+        if newModel then
+          MODEL = newModel
+          print("Switched to model: " .. MODEL)
+        else
+          print("Unknown model. Available: 2.5, 3, flash")
+        end
+      else
+        print("\nAvailable models:")
+        print("  2.5   - Gemini 2.5 Flash (default)")
+        print("  3     - Gemini 3.0 Flash Preview")
+        print("  flash - Gemini 2.5 Flash")
+        print("\nUsage: model <version>")
+        print("Current: " .. MODEL)
+      end
     elseif command == "setkey" then
       term.setTextColor(colors.cyan)
       write("Enter your Gemini API key: ")
