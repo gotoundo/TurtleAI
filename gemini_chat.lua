@@ -1,6 +1,6 @@
 -- Gemini Chat for ComputerCraft with Local Documentation
 -- Refactored to be smaller while maintaining full RAG functionality
-local MODEL, VERSION = "models/gemini-3-flash-preview", "1.4.3"
+local MODEL, VERSION = "models/gemini-3-flash-preview", "1.5.0"
 local DEBUG, DOCS_LOADED = false, false
 
 -- Simplified JSON helpers
@@ -434,7 +434,7 @@ local function main()
 
   print("=== Gemini Chat v" .. VERSION .. " with Documentation ===")
   print("Model: " .. MODEL)
-  print("Commands: exit, setkey, clear, save, listdocs, debug, reload")
+  print("Commands: exit, setkey, clear, save, listdocs, debug, reload, update")
   print("-------------------------------------------------")
 
   if not settings.get("gemini.api_key") or settings.get("gemini.api_key") == "" then
@@ -482,6 +482,40 @@ local function main()
       DOCS_LOADED = false
       local success, message = loadDocs()
       print(message)
+    elseif command == "update" then
+      print("Downloading latest version from GitHub...")
+      local url = "https://raw.githubusercontent.com/gotoundo/TurtleAI/dev/gemini_chat.lua"
+      local tempFile = "gemini_chat_new.lua"
+
+      local response = http.get(url)
+      if not response then
+        print("Error: Could not connect to GitHub")
+      else
+        local content = response.readAll()
+        response.close()
+
+        -- Check if we got valid content
+        if content and #content > 100 then
+          local file = fs.open(tempFile, "w")
+          file.write(content)
+          file.close()
+
+          -- Get current program name
+          local programName = shell.getRunningProgram()
+
+          -- Delete old and rename new
+          fs.delete(programName)
+          fs.move(tempFile, programName)
+
+          print("Update successful! Restarting...")
+          sleep(1)
+          shell.run(programName)
+          return -- Exit current instance
+        else
+          print("Error: Downloaded file appears invalid")
+          if fs.exists(tempFile) then fs.delete(tempFile) end
+        end
+      end
     elseif command == "clear" then
       term.setTextColor(colors.cyan)
       print("Gemini:")
