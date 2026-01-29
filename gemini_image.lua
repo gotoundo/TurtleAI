@@ -6,7 +6,7 @@ Uses Gemini Imagen API to generate images and displays them on CC monitors
 Includes PNG decoder, base64 decoder, and CC 16-color converter
 --]]
 
-local VERSION = "1.0.0"
+local VERSION = "1.0.1"
 
 -- Load PNG decoder (merged pngLua library)
 local PngImage
@@ -325,6 +325,40 @@ elseif args[1] == "setkey" then
   settings.set("gemini.api_key", key)
   settings.save()
   print("API key saved!")
+elseif args[1] == "update" then
+  print("Downloading latest version from GitHub...")
+  local url = "https://raw.githubusercontent.com/gotoundo/TurtleAI/dev/gemini_image.lua"
+  local tempFile = "gemini_image_new.lua"
+
+  local response = http.get(url)
+  if not response then
+    print("Error: Could not connect to GitHub")
+  else
+    local content = response.readAll()
+    response.close()
+
+    -- Check if we got valid content
+    if content and #content > 100 then
+      local file = fs.open(tempFile, "w")
+      file.write(content)
+      file.close()
+
+      -- Get current program name
+      local programName = shell.getRunningProgram()
+
+      -- Delete old and rename new
+      fs.delete(programName)
+      fs.move(tempFile, programName)
+
+      print("Update successful! Restarting...")
+      sleep(1)
+      shell.run(programName)
+      return
+    else
+      print("Error: Downloaded file appears invalid")
+      if fs.exists(tempFile) then fs.delete(tempFile) end
+    end
+  end
 elseif args[1] == "help" then
   print("Gemini Image Generator v" .. VERSION)
   print("Using Gemini 2.5 Flash Image")
@@ -334,6 +368,7 @@ elseif args[1] == "help" then
   print("  gemini_image <prompt>           - Generate with prompt (1:1 ratio)")
   print("  gemini_image <prompt> <ratio>   - Generate with aspect ratio")
   print("  gemini_image setkey             - Set API key")
+  print("  gemini_image update             - Update from GitHub")
   print("  gemini_image help               - Show this help")
   print()
   print("Aspect Ratios:")
