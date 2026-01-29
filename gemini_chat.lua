@@ -1,6 +1,6 @@
 -- Gemini Chat for ComputerCraft with Local Documentation
 -- Refactored to be smaller while maintaining full RAG functionality
-local MODEL, VERSION = "models/gemini-3-flash-preview", "1.4.2"
+local MODEL, VERSION = "models/gemini-3-flash-preview", "1.4.3"
 local DEBUG, DOCS_LOADED = false, false
 
 -- Simplified JSON helpers
@@ -68,9 +68,9 @@ local function callGemini(prompt, withHistory, docContext, maxTokens)
       if msg.role == "user" and i == #conversationHistory then
         local enhancedText = msg.text
         if docContext and docContext ~= "" then
-          enhancedText = enhancedText .. "\n\n" .. docContext .. "\n\nPlease provide a single-sentence answer that fits on a small computer screen."
+          enhancedText = enhancedText .. "\n\n" .. docContext .. "\n\nPlease provide a clear, concise answer (2-3 sentences max)."
         else
-          enhancedText = enhancedText .. "\n\nPlease provide a single-sentence answer that fits on a small computer screen."
+          enhancedText = enhancedText .. "\n\nPlease provide a clear, concise answer (2-3 sentences max)."
         end
         table.insert(messages, '{"role":"user","parts":[{"text":"' .. jsonEscape(enhancedText) .. '"}]}')
       else
@@ -417,7 +417,7 @@ local function answerWithRAG(query)
 
   -- Call Gemini with conversation history and document context
   if DEBUG then print("[DEBUG] Stage 3: Calling Gemini with context") end
-  local answer, error = callGemini(query, true, docContext, 200)
+  local answer, error = callGemini(query, true, docContext, 1000)
   if not answer then
     if DEBUG then print("[DEBUG] Final answer failed: " .. (error or "unknown")) end
     return "Error: " .. (error or "Failed to get response"), "Error occurred"
