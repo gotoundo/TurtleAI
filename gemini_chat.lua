@@ -9,7 +9,7 @@ local MODELS = {
   ["2.5"] = "models/gemini-2.5-flash",
   ["3"] = "models/gemini-3-flash-preview",
   ["lite"] = "models/gemini-2.5-flash-lite",
-  ["gemma"] = "models/gemma-3-27b"
+  ["gemma"] = "models/gemma-3-27b-it"
 }
 
 -- Simplified JSON helpers
@@ -436,10 +436,10 @@ local function main()
         end
       else
         print("\nAvailable models:")
-        print("  2.5   - Gemini 2.5 Flash (default)")
-        print("  3     - Gemini 3.0 Flash")
-        print("  lite  - Gemini 2.5 Flash Lite")
-        print("  gemma - Gemma 3 27b")
+        print(" 2.5  - Gemini 2.5 Flash (default)")
+        print(" 3    - Gemini 3.0 Flash")
+        print(" lite - Gemini 2.5 Flash Lite")
+        print(" gemma - Gemma 3 27b")
         print("\nUsage: model <version>")
         print("Current: " .. MODEL)
       end
